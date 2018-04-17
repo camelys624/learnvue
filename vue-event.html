@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="example-1">
+    <button v-on:click="counter+=1">Add 1</button>
+    <p>The button above has been clicked {{ counter }} times.</p>
+</div>
+<div id="example-2">
+    <!-- 'greet'是在下面定义的方法-->
+    <button v-on:click="greet">Greet</button>
+</div>
+<div id="example-3">
+    <button v-on:click="say('hi')">Say hi</button>
+    <button v-on:click="say('what')">Say what</button>
+</div>
+<div id="example-4">
+    <input v-model="message" placeholder="edit me">
+    <p>message is {{message}}</p>
+</div>
+<div id="example-5">
+    <span>Multiline message is:</span>
+    <p style="white-space: pre-line;">{{ message }}</p>
+    <br>
+    <textarea v-model="message" placeholder="add multiple lines"></textarea>
+</div>
+<div id="example-6">
+    <input type="checkbox" id="checkbox" v-model="checked">
+    <label for="checkbox">{{checked}}</label>
+</div>
+<div id="example-7">
+    <input type="checkbox" id="jack" value="jack" v-model="checkedNames">
+    <label for="jack">Jack</label>
+    <input type="checkbox" id="john" value="john" v-model="checkedNames">
+    <label for="john">John</label>
+    <input type="checkbox" id="mike" value="mike" v-model="checkedNames">
+    <label for="mike">Mike</label>
+    <br>
+    <span>Checked names:{{checkedNames}}</span>
+</div>
+<div id="example-8">
+    <input type="radio" id="one" value="one" v-model="picked">
+    <label for="one">One</label>
+    <br>
+    <input type="radio" id="two" value="two" v-model="picked">
+    <label for="two">Two</label>
+    <br>
+    <span>Picked:{{picked}}</span>
+</div>
+<div id="example-9">
+    <select v-model="selected">
+        <option disabled value="">请选择</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <br>
+    <span>Selected:{{selected}}</span>
+</div>
+<div id="example-10">
+    <select v-model="selected" multiple style="width: 50px;">
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <br>
+    <span>Selected:{{selected}}</span>
+</div>
+<div id="example-11">
+    <select v-model="selected">
+        <option v-for="option in options" v-bind:value="option.value">
+            {{option.text}}
+        </option>
+    </select>
+    <span>Selected:{{selected}}</span>
+</div>
+</body>
+<script type="text/javascript">
+    // 用v-for渲染的动态选项
+    var example11=new Vue({
+        el:'#example-11',
+        data:{
+            selected:'A',
+            options:[
+                {text:'one',value:'A'},
+                {text:'two',value:'B'},
+                {text:'three',value:'C'}
+            ]
+        }
+    })
+    // 选择框。多选
+    var example10 = new Vue({
+        el: '#example-10',
+        data: {
+            selected: []
+        }
+    })
+    // 选择框，单选
+
+    // 注意！！！
+
+    // 如果v-model表达式的初始值未能匹配任何选项，<select>元素将被渲染为“未选中”状
+    // 态，在iOS中，这会使用户无法选择第一个选项。
+    // 因为这样的情况下，iOS不会触发change事件。因此，更推荐像上面这样提供一个值为空的禁用项。
+    var example9 = new Vue({
+        el: '#example-9',
+        data: {
+            selected: ''
+        }
+    })
+    //单选按钮
+    var example8 = new Vue({
+        el: '#example-8',
+        data: {
+            picked: ''
+        }
+    })
+    //多选按钮
+    var example7 = new Vue({
+        el: '#example-7',
+        data: {
+            checkedNames: []
+        }
+    })
+    var example6 = new Vue({
+        el: '#example-6',
+        data: {
+            checked: false
+        }
+    })
+    var example5 = new Vue({
+        el: '#example-5',
+        data: {
+            message: ''
+        }
+    })
+    var example4 = new Vue({
+        el: '#example-4',
+        data: {
+            message: ''
+        }
+    })
+    var example = new Vue({
+        el: '#example-1',
+        data: {
+            counter: 0
+        }
+    })
+    //许多事件处理逻辑会更复杂，所以直接把JavaScript代码写在v-on指令是不可行的。
+    //因此v-on还可以接受一个需要调用的方法名称
+    var example2 = new Vue({
+        el: '#example-2',
+        data: {
+            name: 'Vue.js'
+        },
+        //在methods对象中定义方法
+        methods: {
+            greet: function (event) {
+                //this在方法中指向当前Vue实例
+                alert('Hello' + this.name + '!')
+                //event是原生DOM事件
+                if (event) {
+                    alert(event.target.tagName)
+                }
+            }
+        }
+    })
+    //也可以直接用JavaScript调用方法
+    //example2.greet()
+
+
+    //除了直接绑定到一个方法，也可以内联JavaScript语句中调用方法：
+    new Vue({
+        el: '#example-3',
+        methods: {
+            say: function (message) {
+                alert(message)
+            }
+        }
+    })
+</script>
+</html>

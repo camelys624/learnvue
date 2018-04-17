@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue-组件</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="example">
+    <my-component></my-component>
+    <!-- 在HTML中使用kebab-case-->
+    <child my-message="hello!"></child>
+</div>
+<div id="prop-example-2">
+    <input v-model="parentMsg">
+    <br>
+    <child v-bind:my-message="parentMsg"></child>
+</div>
+
+<div id="counter-event-example">
+    <p>{{total}}</p>
+    <button-counter v-on:increment="incrementTotal"></button-counter>
+    <button-counter v-on:increment="incrementTotal"></button-counter>
+</div>
+
+
+<div id="message-event-example" class="demo">
+    <p v-for="msg in messages">{{msg}}</p>
+    <button-message v-on:message="handleMessage"></button-message>
+</div>
+<!--
+<div class="container">
+    <header>
+        <slot name="header"></slot>
+    </header>
+    <main>
+        <slot></slot>
+    </main>
+    <footer>
+        <slot name="footer"></slot>
+    </footer>
+</div>
+<app-layout>
+    <h1 slot="header">这里可能是一个页面标题</h1>
+    <p>主要内容的一个段落</p>
+    <p>另一个主要段落</p>
+    <p slot="footer">这里有一些联系信息</p>
+</app-layout>-->
+</body>
+<script type="text/javascript">
+    // 使用载荷(payload)数据的展示
+    Vue.component('button-message', {
+        template: '<div>' +
+        '<input type="text" v-model="message" />' +
+        '<button v-on:click="handleSendMessage">Send</button>' +
+        '</div>',
+        //构造Vue实例时传入的各种数据大多数都可以在组件里使用。只有一个例外：data必须是函数。
+        data: function () {
+            return {
+                message: 'test message'
+            }
+        },
+        methods: {
+            handleSendMessage: function () {
+                this.$emit('message', {message: this.message})
+            }
+        }
+    })
+    new Vue({
+        el: '#message-event-example',
+        data: {
+            messages: []
+        },
+        methods: {
+            handleMessage: function (payload) {
+                this.messages.push(payload.message)
+            }
+        }
+    })
+
+    //使用v-on绑定自定义事件
+    Vue.component('button-counter', {
+        template: '<button v-on:click="incrementCounter">{{counter}}</button>',
+        data: function () {
+            return {
+                counter: 0
+            }
+        },
+        methods: {
+            incrementCounter: function () {
+                this.counter += 1
+                this.$emit('increment')
+            }
+        }
+    })
+    new Vue({
+        el: '#counter-event-example',
+        data: {
+            total: 0
+        },
+        methods: {
+            incrementTotal: function () {
+                this.total += 1
+            }
+        }
+    })
+
+
+    //Prop验证
+    Vue.component('example', {
+        props: {
+            // 基础类型检测（'null'指允许任何类型）
+            propA: Number,
+            // 可能是多种类型
+            propB: [String, Number],
+            // 必传且是字符串
+            propC: {
+                type: String,
+                required: true
+            },
+            // 数值且有默认值
+            propD: {
+                type: Number,
+                default: 100
+            },
+            // 数组、对象的默认值应当由一个工厂函数返回
+            propE: {
+                type: Object,
+                default: function () {
+                    return {message: 'Hello'}
+                }
+            },
+            // 自定义验证函数
+            propF: {
+                validator: function (value) {
+                    return value > 10
+                }
+            }
+        }
+    })
+    // 使用Prop传递数据
+    Vue.component('child', {
+        // 声明props
+        // 在JavaScript中使用 camelCase
+        props: ['myMessage'],
+        // 就像data一样，prop也可以在模板中使用
+        // 同样也可以在vm实例中通过this.message来使用
+        template: '<span>{{myMessage}}</span>'
+    })
+    // 动态props
+    new Vue({
+        el: '#prop-example-2',
+        data: {
+            parentMsg: 'Message from parent.'
+        }
+    })
+    // 全局注册注册
+    /*Vue.component('my-component',{
+        template:'<div>A custom component</div>'
+    })
+    */
+    // 创建根实例
+    /*new Vue({
+        el:'#example'
+    })*/
+    // 局部注册
+    var Child = {
+        template: '<div>A custom component</div>'
+    }
+    new Vue({
+        el: '#example',
+        components: {
+            //<my-component>将只在父组件模块中可用
+            'my-component': Child
+        }
+    })
+</script>
+</html>
