@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello webpack</title>
+</head>
+<body>
+<div id="app"></div>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript">
+    let app = new Vue({
+        el:'#app',  // dom also is ok.like this //document.getElementById('app');
+        template:'<div><h1>hello everyone {{text}}</h1></div>',
+        data:function (){
+            return {
+                text:'i\'m ykk'
+            };
+        }
+    })
+</script>
+</body>
+</html>

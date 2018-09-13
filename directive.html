@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue directive</title>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/javascript" src="./node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el:'#app',
+        template:`
+            <div>
+            <!---only one root node --->
+            <span v-text="myText"></span>
+            </hr>
+            <span v-html="myHtml"></span>
+            <!---if v-if=false the node whill be comment--->
+            <!----->
+            <button v-if=" num == 1 ">test v-if</button>
+            <button v-else-if=" num == 2 ">test v-else-if</button>
+            <button v-else>test else</button>
+            <!---button should be together--->
+            </hr>
+            <button v-show="isShow">show</button>
+            <!---just set node-style display:none--->
+            </div>
+            `,
+        data:function(){
+            return {
+                myText: '<h1>this is my text</h1>',     // the same as innerText
+                myHtml: '<h1>this is my html</h1>',      // the same as innerHtml
+                num: 2,
+                isShow:false,
+            }
+        }
+    });
+</script>
+</body>
+</html>
