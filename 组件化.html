@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件化</title>
+    <script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/javascript">
+    /* 1. 生成子组件     2. 声明子组件    3.使用子组件*/
+
+    // 头组件
+    var MyHeader = {    // 生成子组件
+        template: '<div>我是头部</div>'
+    };
+    /*函数调用的方式创建组件*/
+    var MyBody = Vue.extend({
+        template:'<div>我是函数调用方式的身体</div>'
+    });
+
+    /*下面的方式是语法糖*/
+    // var MyBody = {
+    //     template: '<div>我是身体</div>'
+    // };
+    var MyFooter = {
+        template: `
+<div>
+    我是底部<button @click="showNum(232131)">点我</button>
+</div>`,
+        methods:{
+            showNum:function (num) {
+                alert(num);
+            }
+        }
+    };
+    // 声明入口组件
+    var App = {
+        components: {   // 声明子组件
+            'my-header': MyHeader,
+            'my-body': MyBody,
+            'my-footer':MyFooter
+        },
+        // 使用子组件
+        template: `
+<div>
+    <my-header/>
+    <my-body></my-body>
+    <my-footer></my-footer>
+</div>
+        `
+    };
+    new Vue({   // 父组件
+        el: '#app',
+        components: { // 声明要用的组件们
+            // key是组件名，value是组件对象
+            app: App
+        },
+        template: '<app/>' // 入口组件
+
+    })
+</script>
+</body>
+</html>
