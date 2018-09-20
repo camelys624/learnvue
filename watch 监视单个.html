@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>watch 监视单个</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/javascript">
+    let App = {
+        template: `
+            <div>
+            <input type="text" v-model="myTest">
+            {{myTest}}
+            <button @click="stus[0].name='rose'">改变stus[0].name属性</button>
+</div>
+        `,
+        data: function () {
+            return {
+                myTest: '',
+                stus: [{name: 'ykk'}]
+            }
+        },
+        watch: {
+            // key属于data属性的属性名，value是监视后的行为
+            myTest: function (newV, oldV) {
+                console.log(newV, oldV);
+                if (newV === 'cc') {
+                    alert('hei');
+                }
+            },
+            // 监视复杂属性，无法监视的原因是监视的是对象的地址，这里地址没改，改的是同地址属性的值
+            /* stus:function () {
+                 console.log('监视？不可能')
+             }*/
+
+            // 深度监视：object||array
+            stus:{
+                deep:true,  // true
+                handler:function (newV,oldV) {
+                    console.log('监视复杂类型成功！！');
+                }
+            }
+        }
+    };
+    new Vue({
+        el: '#app',
+        components: {
+            app: App
+        },
+        template: '<app/>'
+    })
+</script>
+</body>
+</html>
