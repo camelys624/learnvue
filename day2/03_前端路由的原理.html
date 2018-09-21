@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>前端路由的原理</title>
+</head>
+<body>
+<div id="content"></div>
+<a href="#/login">登录</a>
+<a href="#/register">注册</a>
+<script type="text/javascript">
+    let div = document.getElementById('content');
+    // hashchange事件....url上的部分锚点数据(#xxx)改变，就可以获取到这个事件
+    window.addEventListener('hashchange',function () {
+        // console.log(location.hash);
+        // 根据不同的锚点值做出不同的显示
+        switch (location.hash) {
+            case '#/login':
+                div.innerHTML = '<h2>登录界面</h2>';
+                break;
+            case '#/register':
+                div.innerHTML = '<h2>注册界面</h2>';
+                break;
+
+        }
+    })
+</script>
+</body>
+</html>
