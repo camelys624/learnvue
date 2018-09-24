@@ -2,9 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>参数的获取</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
 </head>
 <body>
-$END$
+<div id="app"></div>
+<!-- 1：引入vue-router（核心插件）对象-->
+<script src="../src/vue-router.js"></script>
+<script type="text/javascript">
+    let Login = {
+        template: `
+            <div>我是登录页面</div>
+        `,
+        created:function () {
+            console.log(this.$route.query);
+        }
+    };
+    let Register = {
+        template: `
+        <div>我是注册界面</div>
+      `
+        ,created:function () {
+            console.log(this.$route.params);
+        }
+    };
+    // 2: 安装插件 => ？
+    Vue.use(VueRouter);
+    // 3: 创建一个路由对象
+    // console.log(VueRouter);
+    let router = new VueRouter({
+        // 4: 配置路由对象
+        routes: [
+            // 路由对象有了名称就等有有了一个索引，router-link只需要拿到这个索引就ok
+            {name: 'login', path: '/mylogin', component: Login},
+            {name: 'register', path: '/register/:name', component: Register}
+        ]
+    });
+
+    // 6: 指定路由改变局部的位置
+    let App = {
+        template: `
+            <div>
+            <router-link :to="{
+                name:'login',
+                query:{id:1}
+            }">登录</router-link>
+            <router-link :to="{
+                name:'register',
+                params:{name:'ykk'}
+             }">注册</router-link>
+
+            <router-view></router-view>
+</div>
+        `
+    };
+    // 5： 将配置好的路由对象关联到vue实例中
+    new Vue({
+        el: '#app',
+        router: router,  // 不加这一步，会报matched undefined错误
+        components: {
+            app: App
+        },
+        template: '<app/>'
+    })
+
+
+</script>
 </body>
 </html>
