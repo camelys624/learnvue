@@ -1,0 +1,16 @@
+- vue复习
+    - option的根属性
+        - el:目的地(string||DOM元素)
+        - template模板
+        - data是一个函数,return一个对象，对象中的key,可以直接在页面中使用。
+        在js中使用this指向key，如this.xx。
+        - components:key是组件名，value是组件对象
+        - methods:一般用来配合事件调用，里面放的就是方法
+        - props:子组件接收的父组件参数设置['title']
+    - 指令
+        - v-if/v-show:if就是插入或移除问题，show是否隐藏的问题
+        - v-else-if/v-else:必须是和v-if是相邻的元素
+        - v-bind/v-on:bind是给属性赋值，v-on绑定事件
+            - v-bind:属性="变量" ===> :属性="变量"
+            - v-on:事件名="函数名" ===> @事件名="函数名"
+        - v-bind/v-model:v-bind是单向流数据(vue->html),v-model是双向数据流(vue->html->vue)
