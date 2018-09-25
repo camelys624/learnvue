@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>options</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/javascript">
+      let App = {
+        template:`
+        <div>
+          <button @click="sendAjax">发请求</button>
+        </div>
+        `,
+        methods:{
+            sendAjax:function () {
+              this.$axios.defaults.baseURL = 'http://127.0.0.1:8888/';
+              // this.$axios.defaults.headers = {};  // 覆盖原本默认头
+              // 走默认头，修改个别
+              this.$axios.defaults.headers.accept = 'abc';
+              // 让组件具备axios对象的引用
+              // 请求1
+              axios.get('',{
+                params:{id:1},
+                transformResponse:function (data){
+                  return data;
+                }
+              })
+              .then(function (res) {  // 成功的回调函数
+                console.log(res.data);
+              })
+              .catch(function (err) { // 失败的回调函数
+                console.log(err);
+              });
+              // 请求2
+              this.$axios.post('/add','name=jack'{
+                timeout:1000
+              })
+              .then(res=>{
+                console.log(res);
+              })
+              .catch(err=>{
+                console.log(err);
+              })
+            }
+        }
+    };
+    // 组件内的每一个this对象，都是Vue的孩子，
+    // Vue祖宗的原型数据，都会共享给子类
+    Vue.prototype.$axios = axios;
+    new Vue({
+        el:'app',
+        components:{
+            app:App
+        },
+        template:'<app/>'
+    });
+    </script>
+  </body>
+</html>
