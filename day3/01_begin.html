@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axios起步</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/javascript">
+    let App = {
+        template:`
+        <div>
+        <button @click="sendAjax">发请求</button>
+</div>
+        `,
+        methods:{
+            sendAjax:function () {
+                // 让组件具备axios对象的引用
+                axios.get('http://127.0.0.1:8888/')
+                    .then(function (res) {  // 成功的回调函数
+                        console.log(res);
+                    })
+                    .catch(function (err) { // 失败的回调函数
+                        console.log(err);
+                    })
+            }
+        }
+    };
+    // 组件内的每一个this对象，都是Vue的孩子，
+    // Vue祖宗的原型数据，都会共享给子类
+    Vue.prototype.$axios = axios;
+    new Vue({
+        el:'app',
+        components:{
+            app:App
+        },
+        template:'<app/>'
+    })
+</script>
+</body>
+</html>
