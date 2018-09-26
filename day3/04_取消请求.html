@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>options</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/javascript">
+    let App = {
+        template: `
+        <div>
+          上传进度：{{rate}}%
+          选择文件：<input type="file" name="file" @change="changeFile">
+          <button @click="sendAjax">发请求</button>
+          <button @click="cancel">取消</button>
+          <button @click="resume">续传</button>
+        </div>
+        `,
+        data:function (){
+          return {
+              res1:'',
+              res2:'',
+              file:{},
+              rate:0,
+              loaded:0
+          };
+        },
+        created:function (){
+            this.$axios.defaults.onUploadProgress = (progressEvent) => {
+                // 保存最后上传的大小
+                this.loaded = progressEvent.loaded;
+                console.log(progressEvent.loaded);
+                console.log(progressEvent.total);
+                this.rate = (progressEvent.loaded / progressEvent.total) * 100;
+            };
+        },
+        methods: {
+            sendAjax: function () {
+                const CancelToken = axios.CancelToken;
+                const source = CancelToken.source;
+                this.source = source;
+                let fd = new FormData();
+                fd.append('file',this.file);
+                this.$axios.post('/add',fd);
+            },
+            cancel: function () {
+                this.source.cancel();
+            },
+            resume:function (){
+                // 剪裁文件        开始       结尾
+                let fileData = this.file.slice(this.loaded + 1,this.file.size);
+                let fd = new FormData();
+                fd.append('file',fileData);
+                // 为了续传以后再取消
+                const CancelToken = axios.CancelToken;
+                const source = CancelToken.source;
+                this.source = source;
+                this.$axios.post('',fd,{
+                    // 携带取消标识
+                    cancelToken: source.token
+                })
+                    .then(res=>{
+                        console.log(res);
+                    })
+                    .catch(err=>{
+                        console.log(err);
+                    })
+            },
+            changeFile(e) {
+                this.file = e.target.files[0];
+            }
+        }
+    };
+    // 组件内的每一个this对象，都是Vue的孩子，
+    // Vue祖宗的原型数据，都会共享给子类
+    Vue.prototype.$axios = axios;
+    new Vue({
+        el: '#app',
+        components: {
+            app: App
+        },
+        template: '<app/>'
+    })
+</script>
+</body>
+</html>

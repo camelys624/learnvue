@@ -36,7 +36,7 @@
                 console.log(err);
               });
               // 请求2
-              this.$axios.post('/add','name=jack'{
+              this.$axios.post('/add','name=jack',{
                 timeout:1000
               })
               .then(res=>{
@@ -52,7 +52,7 @@
     // Vue祖宗的原型数据，都会共享给子类
     Vue.prototype.$axios = axios;
     new Vue({
-        el:'app',
+        el:'#app',
         components:{
             app:App
         },

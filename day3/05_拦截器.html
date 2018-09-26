@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>options</title>
+    <script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/javascript">
+    let App = {
+        template: `
+        <div>
+          <button @click="sendAjax">发请求</button>
+        </div>
+        `,
+        data:function (){
+          return {
+              res1:'',
+              isShow:false
+          };
+        },
+        created:function (){
+            this.$axios.defaults.onUploadProgress = (progressEvent) => {
+                // 保存最后上传的大小
+                this.loaded = progressEvent.loaded;
+                console.log(progressEvent.loaded);
+                console.log(progressEvent.total);
+                this.rate = (progressEvent.loaded / progressEvent.total) * 100;
+            };
+        },
+        methods: {
+            // 实现一个类似cookie的机制
+            // 服务器 -> set-cookie:xxx 浏览器保存起来在响应拦截器中执行
+            // 在请求之前，从本地获取xxx, 设置拦截器的请求头
+
+            sendAjax: function () {
+                // 配置拦截器    use给请求之前做的事是多件，可以use多次
+                this.$axios.interceptors.request.use((config) =>{
+                    // console.log(config);
+                    // 设置请求头，类似cookie
+                    let token = localStorage.getItem('token');
+                    if(token){
+                        config.headers['token'] = token;
+                    }
+                    this.isShow = true;
+                    return config;
+                });
+                // 响应拦截器
+                this.$axios.interceptors.response.use((res) => {
+                    console.log(res);   //res.config
+                    // 1.获取服务器的响应头
+                    if(res.headers.token){
+                        let token = res.headers.token;
+                        localStorage.setItem('token',token);
+                        this.isShow = false;
+                    }
+                    return res;
+                });
+                // 1：在发起请求之前，show一个loading出来
+                // 2：在响应回来之后关闭loading窗
+                this.$axios.get('http://127.0.0.1:8888')
+                    .then(res=>{
+                        console.log('响应成功',res);
+                    })
+            },
+        }
+    };
+    // 组件内的每一个this对象，都是Vue的孩子，
+    // Vue祖宗的原型数据，都会共享给子类
+    Vue.prototype.$axios = axios;
+    new Vue({
+        el: '#app',
+        components: {
+            app: App
+        },
+        template: '<app/>'
+    })
+</script>
+</body>
+</html>
