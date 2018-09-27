@@ -1,0 +1,19 @@
+{
+  "name": "testmodule",
+  "version": "1.0.0",
+  "description": "learJavaScriptModule",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "webpack --config ./webpack.dev.config.js",
+    "prod": "webpack --config ./webpack.prod.config.js"
+  },
+  "keywords": [
+    "module"
+  ],
+  "author": "ykk",
+  "license": "ISC",
+  "dependencies": {
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0"
+  }
+}
